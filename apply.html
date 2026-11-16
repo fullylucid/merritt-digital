@@ -220,12 +220,16 @@
         <input type="tel" id="phone" name="phone" maxlength="40" autocomplete="tel" inputmode="tel">
       </div>
 
-      <!-- Honeypot. Named `company` per the contract: any non-empty value is dropped
-           silently server-side. Off-screen, unfocusable and hidden from assistive
-           tech, so only an automated filler ever reaches it. -->
+      <!-- Honeypot. Sent on the wire as `company` per the contract: any non-empty
+           value is dropped silently server-side. Off-screen, unfocusable and hidden
+           from assistive tech, so only an automated filler ever reaches it.
+           The DOM name and label are deliberately meaningless: a field called
+           "Company" is one Chrome autofill classifies as an organization and fills
+           from a saved address regardless of autocomplete="off" — which turned a
+           real person's submission into a silent drop (Zach, 2026-11-16). -->
       <div class="trap" aria-hidden="true">
-        <label for="company">Company</label>
-        <input type="text" id="company" name="company" tabindex="-1" autocomplete="off">
+        <label for="hp-x7">Leave this empty</label>
+        <input type="text" id="hp-x7" name="hp-x7" tabindex="-1" autocomplete="off">
       </div>
     </fieldset>
 
@@ -344,7 +348,7 @@
       scope: val('scope'),
       contact: { name: val('name'), email: val('email') },
       consent: true,
-      company: document.getElementById('company').value   // honeypot, sent as found
+      company: document.getElementById('hp-x7').value   // honeypot, sent as found (wire name per contract)
     };
     // optional fields are omitted rather than sent empty
     if (val('website')) body.website = val('website');
